@@ -13,6 +13,7 @@ import {
 import { app } from "./fierbase/fierbase.config";
 import { createContext, useState, ReactNode, useEffect } from "react";
 import React from "react";
+import axios from "axios";
 
 export interface AuthProviderProps {
   children?: ReactNode;
@@ -90,7 +91,18 @@ const AuthProvider = ({ children }: AuthProviderProps): JSX.Element => {
   useEffect(() => {
     const unsubsrcibe = auth.onAuthStateChanged((currentUser) => {
       setUser(currentUser);
-      setLoading(false);
+      // get set JWT token
+      if (currentUser) {
+        axios
+          .post("http://localhost:5000/jwt", { email: currentUser.email })
+          .then((data) => {
+            // console.log(data.data.token);
+            localStorage.setItem("acces-token", data.data.token);
+            setLoading(false);
+          });
+      } else {
+        localStorage.removeItem("acces-token");
+      }
     });
 
     return unsubsrcibe;

@@ -49,26 +49,25 @@ const Registretion = () => {
               console.log(logdUser);
               updateUser(data.name, imgUrl)
                 .then(() => {
-                  // const collectUser = {
-                  //   name: data.name,
-                  //   email: data.email,
-                  //   photo: imgUrl,
-                  // };
-                  // fetch("http://localhost:5000/users", {
-                  //   method: "POST",
-                  //   headers: {
-                  //     "content-type": "application/json",
-                  //   },
-                  //   body: JSON.stringify(collectUser),
-                  // })
-                  //   .then((res) => res.json())
-                  //   .then((data) => {
-                  //     console.log(data);
-                  //   });
-                  if (data.insertedId) {
-                    toast.success("Signup successful");
-                    navigat(from, { replace: true });
-                  }
+                  const collectUser = {
+                    name: data.name,
+                    email: data.email,
+                    photo: imgUrl,
+                  };
+                  fetch("http://localhost:5000/users", {
+                    method: "POST",
+                    headers: {
+                      "content-type": "application/json",
+                    },
+                    body: JSON.stringify(collectUser),
+                  })
+                    .then((res) => res.json())
+                    .then((data) => {
+                      if (data.insertedId) {
+                        toast.success("Signup successful");
+                        navigat(from, { replace: true });
+                      }
+                    });
                 })
                 .catch((error: string) => console.log(error));
             })
