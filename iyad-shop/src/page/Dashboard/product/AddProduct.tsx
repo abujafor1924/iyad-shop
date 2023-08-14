@@ -5,6 +5,7 @@ import { toast } from "react-hot-toast";
 
 type Inputs = {
   name: string;
+  description: string;
   category: string;
   quantity: number | any;
   price: number | any;
@@ -46,11 +47,12 @@ const AddProduct = () => {
       .then((imgResponse) => {
         if (imgResponse.success) {
           const imgURL = imgResponse.data.display_url;
-          const { name, price, category, quantity } = data;
+          const { name, price, category, quantity, description } = data;
           const newItem = {
             name,
             price: parseFloat(price),
             category,
+            description,
             quantity: parseInt(quantity),
             image: imgURL,
           };
@@ -89,10 +91,10 @@ const AddProduct = () => {
             {...register("category")}
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           >
-            <option value={""}>Choose a country</option>
+            <option value={""}>Choose a Category</option>
             {category.map((cd) => (
-              <option key={cd._id} value={cd.category}>
-                {cd.category}
+              <option key={cd._id} value={cd.categories}>
+                {cd.categories}
               </option>
             ))}
           </select>
@@ -127,6 +129,15 @@ const AddProduct = () => {
             />
             {errors.image && <span>This field is required</span>}
           </div>
+        </div>
+        <div className=" my-4 mt-4">
+          <h1 className="mt-1 my-4 mr-2 w-32">Description</h1>
+          <input
+            type="text"
+            {...register("description", { required: true })}
+            className="  block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50  focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          />
+          {errors.description && <span>This field is required</span>}
         </div>
         <input className="btn btn-info" type="submit" />
       </form>

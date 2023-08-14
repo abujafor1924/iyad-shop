@@ -3,9 +3,12 @@ import { FaCodeCompare, FaRegHeart, FaUserLarge } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 import useAuth from "../../Hooks/useAuth";
 import { useState } from "react";
+import useCart from "../../Hooks/useCart";
 
 const Navbar = () => {
   const { user, logOut } = useAuth();
+  const [cart] = useCart();
+
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const handleDropdownToggle = () => {
@@ -17,6 +20,7 @@ const Navbar = () => {
       .then(() => {})
       .catch((error) => console.log(error));
   };
+
   return (
     <div className="flex flex-wrap  ">
       <section className="relative mx-auto">
@@ -59,11 +63,11 @@ const Navbar = () => {
                 </span>
               </li>
               <li className="flex px-1">
-                <span className="p-1 ">
+                <Link to={"/favorite"} className="p-1 ">
                   <FaRegHeart className="text-xl" />
-                </span>
+                </Link>
               </li>
-              <a className="flex items-center " href="#">
+              <Link to={"/cart"} className="flex items-center ">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="h-6 w-6"
@@ -80,9 +84,13 @@ const Navbar = () => {
                 </svg>
                 <span className="flex absolute -mt-5 ml-4">
                   <span className="animate-ping absolute inline-flex h-3 w-3 rounded-full bg-pink-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-3 w-3 bg-pink-500"></span>
+                  <span className="relative inline-flex rounded-full h-3 w-3 bg-[#9F1239] p-4 -mt-4">
+                    <p className="text-xl font-medium -mt-4 -ml-2 text-white">
+                      {cart?.length || 0}
+                    </p>
+                  </span>
                 </span>
-              </a>
+              </Link>
 
               <div className="flex justify-end mr-10">
                 <div className="relative">
@@ -93,6 +101,7 @@ const Navbar = () => {
                           <label className="btn btn-ghost btn-circle avatar">
                             <div className="w-10 rounded-full ">
                               <img
+                                title={user?.displayName}
                                 // className="rounded-full"
                                 src={user.photoURL}
                               />
@@ -103,9 +112,7 @@ const Navbar = () => {
                         <FaUserLarge className="text-xl" />
                       )}
                     </span>
-                    <p className="text-xl font-semibold mt-4">
-                      {user?.displayName}
-                    </p>
+                    <p className="text-xl font-semibold mt-4"></p>
                   </li>
                   {isDropdownOpen && (
                     <ul className="dropdown-menu z-10 text-2xl font-semibold absolute bg-white mt-2 -ml-16">
@@ -127,7 +134,7 @@ const Navbar = () => {
             </div>
           </div>
 
-          <a className="xl:hidden flex mr-6 items-center" href="#">
+          <a className="xl:hidden flex mr-6 items-center">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-6 w-6 hover:text-gray-200"
@@ -147,7 +154,7 @@ const Navbar = () => {
               <span className="relative inline-flex rounded-full h-3 w-3 bg-pink-500"></span>
             </span>
           </a>
-          <a className="navbar-burger self-center mr-12 xl:hidden" href="#">
+          <a className="navbar-burger self-center mr-12 xl:hidden">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-6 w-6 hover:text-gray-200"

@@ -23,6 +23,10 @@ import AllProduct from "../page/Dashboard/product/AllProduct";
 import AddCategory from "../page/Dashboard/product/Category/AddCategory";
 import UpdateProduct from "../page/Dashboard/product/UpdateProduct";
 
+import Favorite from "../page/Home/productmng/Favorite";
+import CartProduct from "../page/routepage/CartProduct";
+import Payment from "../page/Dashboard/Pyment/Payment";
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -42,12 +46,25 @@ const router = createBrowserRouter([
         element: <Registretion />,
       },
       {
+        path: "/cart",
+        element: <CartProduct />,
+      },
+
+      {
         path: "/test",
         element: (
           <ProtectiveRoute>
             <Test />
           </ProtectiveRoute>
         ),
+      },
+      {
+        path: "/favorite",
+        element: <Favorite />,
+      },
+      {
+        path: "/payment",
+        element: <Payment />,
       },
     ],
   },

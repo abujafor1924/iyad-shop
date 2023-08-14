@@ -23,7 +23,6 @@ const Login = () => {
 
   const navigat = useNavigate();
   const location = useLocation();
-  // const emailRef = useRef();
   const from = location.state?.from?.pathname || "/";
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     signIn(data.email, data.password)

@@ -9,6 +9,7 @@ import {
 
 import { Link, Outlet } from "react-router-dom";
 import DasNave from "../page/Dashboard/Navbar/DasNave";
+import useAdmin from "../Hooks/useAdmin";
 
 const Dashboard: () => JSX.Element = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -21,8 +22,8 @@ const Dashboard: () => JSX.Element = () => {
     setIsPage(!ispage);
   };
 
-  // const [isAdmin] = useAdmin();
-  const isAdmin = true;
+  const [isAdmin] = useAdmin();
+  // const isAdmin = true;
   return (
     <div className="drawer lg:drawer-open">
       <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />

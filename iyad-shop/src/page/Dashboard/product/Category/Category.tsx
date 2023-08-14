@@ -60,7 +60,7 @@ const Category = () => {
             {category.map((cd: any, index: number) => (
               <tr key={cd._id} className="bg-slate-50">
                 <th className="px-10">{index + 1}</th>
-                <td className="pr-96">{cd.category}</td>
+                <td className="pr-96">{cd.categories}</td>
 
                 <td className="px-20" onClick={() => handelDelete(cd._id)}>
                   <FaTrashAlt />

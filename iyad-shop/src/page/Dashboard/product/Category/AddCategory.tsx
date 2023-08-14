@@ -3,7 +3,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { toast } from "react-hot-toast";
 
 type Inputs = {
-  category: string;
+  categories: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   insertedId: any;
 };
@@ -35,10 +35,10 @@ const AddCategory = () => {
       <input
         type="text"
         placeholder="Category Name here"
-        {...register("category", { required: true })}
+        {...register("categories", { required: true })}
         className=" py-4 input input-bordered w-96 max-w-xs bg-black text-white text-xl font-medium"
       />
-      {errors.category && <span>This field is required</span>}
+      {errors.categories && <span>This field is required</span>}
 
       <input className="btn btn-error mx-2 " type="submit" />
     </form>

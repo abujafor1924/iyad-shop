@@ -1,11 +1,32 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import useAxiuseSecure from "../../Hooks/useAxiuseSecure";
+import { useQuery } from "@tanstack/react-query";
+import { FaAngleRight } from "react-icons/fa6";
 
 const Catagorybar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(true);
+  const [isProduct, setIsProduct] = useState("");
 
   const handleDropdownToggle = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
+
+  const [axiosSecure] = useAxiuseSecure();
+  const { data: categories = [] } = useQuery({
+    queryFn: async () => {
+      const res = await axiosSecure.get("/allCategory");
+      return res.data;
+    },
+  });
+
+  useEffect(() => {
+    fetch(`http://localhost:5000/getparoduct?cat=${isProduct}`)
+      .then((res) => res.json())
+      .then((data) => {
+        // console.log(data);
+      });
+  }, [isProduct]);
+
   return (
     <form className="bg-gray-200">
       <div className="flex mx-10 relative ">
@@ -38,38 +59,18 @@ const Catagorybar = () => {
         >
           {isDropdownOpen && (
             <>
-              <li>
-                <button
-                  type="button"
-                  className="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                >
-                  Mockups
-                </button>
-              </li>
-              <li>
-                <button
-                  type="button"
-                  className="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                >
-                  Templates
-                </button>
-              </li>
-              <li>
-                <button
-                  type="button"
-                  className="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                >
-                  Design
-                </button>
-              </li>
-              <li>
-                <button
-                  type="button"
-                  className="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                >
-                  Logos
-                </button>
-              </li>
+              {categories.map((ct) => (
+                <li key={ct._id}>
+                  <button
+                    type="button"
+                    onClick={() => setIsProduct(ct.categories)}
+                    className=" hover:bg-slate-200 text-xl font-medium inline-flex w-full px-4 py-2  dark:hover:bg-gray-600 dark:hover:text-white"
+                  >
+                    {ct.categories}
+                    <FaAngleRight className="font-light text-sm mt-2 ml-10" />
+                  </button>
+                </li>
+              ))}
             </>
           )}
         </ul>

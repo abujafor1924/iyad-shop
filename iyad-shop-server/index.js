@@ -1,32 +1,34 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
+const jwt = require("jsonwebtoken");
 require("dotenv").config();
+const stripe = require("stripe")(process.env.PAYMENT_SECRET_KEY);
 const port = process.env.PORT || 5000;
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
+const { default: Stripe } = require("stripe");
 
 app.use(cors());
 app.use(express.json());
 
 // Middel ware Uses
-// const verifyJWT = (req, res, next) => {
-//   const authorization = req.headers.authorization;
-//   if (!authorization) {
-//     return res.status(401).send({ error: true, messege: "unAuthorized acces" });
-//   }
-
-// middelware
-//   const token = authorization.split(" ")[1];
-//   jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (error, decode) => {
-//     if (error) {
-//       return res
-//         .status(401)
-//         .send({ error: true, messege: "unAuthorized acces" });
-//     }
-//     req.decode = decode;
-//     next();
-//   });
-// };
+const verifyJWT = (req, res, next) => {
+  const authorization = req.headers.authorization;
+  if (!authorization) {
+    return res.status(401).send({ error: true, messege: "unAuthorized acces" });
+  }
+  // middelware
+  const token = authorization.split(" ")[1];
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (error, decode) => {
+    if (error) {
+      return res
+        .status(401)
+        .send({ error: true, messege: "unAuthorized acces" });
+    }
+    req.decode = decode;
+    next();
+  });
+};
 
 app.get("/", (req, res) => {
   res.send("Hello iyad Shop project ");
@@ -54,15 +56,19 @@ async function run() {
     const productCollection = client
       .db("userDataStorege")
       .collection("product");
+    const favoritCollection = client
+      .db("userDataStorege")
+      .collection("favorite");
+    const cartsCollection = client.db("userDataStorege").collection("cart");
 
     // Admin secure JWT
-    // app.post("/jwt", (req, res) => {
-    //   const user = req.body;
-    //   const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
-    //     expiresIn: "5h",
-    //   });
-    //   res.send({ token });
-    // });
+    app.post("/jwt", (req, res) => {
+      const user = req.body;
+      const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
+        expiresIn: "2h",
+      });
+      res.send({ token });
+    });
 
     //     verify admin
     const verifyAdmin = async (req, res, next) => {
@@ -78,6 +84,17 @@ async function run() {
     // admin Get
     app.get("/users", async (req, res) => {
       const result = await userCollection.find().toArray();
+      res.send(result);
+    });
+
+    app.get("/users/admin/:email", async (req, res) => {
+      const email = req.params.email;
+      //  if (req.decode.email !== email) {
+      //    res.send({ admin: false });
+      //  }
+      const query = { email: email };
+      const user = await userCollection.findOne(query);
+      const result = { admin: user?.role === "admin" };
       res.send(result);
     });
 
@@ -151,6 +168,16 @@ async function run() {
       res.send(result);
     });
 
+    app.get("/getparoduct", async (req, res) => {
+      let query = {};
+      if (req?.query?.cat) {
+        const category = req.query.cat;
+        query = { category };
+      }
+      const result = await productCollection.find(query).toArray();
+      res.send(result);
+    });
+
     app.post("/addProduct", async (req, res) => {
       const newItem = req.body;
       const result = await productCollection.insertOne(newItem);
@@ -175,6 +202,70 @@ async function run() {
       const query = { _id: new ObjectId(id) };
       const result = await productCollection.deleteOne(query);
       res.send(result);
+    });
+
+    // favorite section
+
+    app.get("/favorite", async (req, res) => {
+      const result = await favoritCollection.find().toArray();
+      res.send(result);
+    });
+
+    app.post("/favorite", async (req, res) => {
+      const newItem = req.body;
+      const result = await favoritCollection.insertOne(newItem);
+      res.send(result);
+    });
+
+    app.delete("/favorite/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await favoritCollection.deleteOne(query);
+      res.send(result);
+    });
+
+    // cart collection
+
+    app.get("/carts", async (req, res) => {
+      const email = req.query.email;
+      if (!email) {
+        res.send("Email parameter is missing");
+      }
+      const query = { "categoryitemId.email": email };
+      const result = await cartsCollection.find(query).toArray();
+      res.send(result);
+    });
+
+    app.post("/carts", async (req, res) => {
+      const item = req.body;
+      const result = await cartsCollection.insertOne(item);
+      res.send(result);
+    });
+
+    app.delete("/carts/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await cartsCollection.deleteOne(query);
+      res.send(result);
+    });
+
+    // payment section
+
+    app.post("/create-payment-intent", async (req, res) => {
+      const { price } = req.body;
+      if (!price) {
+        return res.send({ message: "Price not valid" });
+      }
+      const amount = price * 100;
+      console.log(price, amount);
+      const paymentIntent = await stripe.paymentIntents.create({
+        amount: amount,
+        currency: "usd",
+        automatic_payment_methods: ["card"],
+      });
+      res.send({
+        clientSecret: paymentIntent.client_secret,
+      });
     });
 
     await client.db("admin").command({ ping: 1 });

@@ -137,6 +137,9 @@ const AllProduct = () => {
                   Product
                 </th>
                 <th scope="col" className="px-6 py-3">
+                  Category
+                </th>
+                <th scope="col" className="px-6 py-3">
                   Price
                 </th>
                 <th scope="col" className="px-6 py-3">
@@ -166,6 +169,7 @@ const AllProduct = () => {
                       <div className="text-base font-semibold">{pd.name}</div>
                     </div>
                   </th>
+                  <td className="px-6 py-4">{pd.category}</td>
                   <td className="px-6 py-4">${pd.price}</td>
                   <td className="px-6 py-4">
                     <div className="flex items-center">{pd.quantity}</div>

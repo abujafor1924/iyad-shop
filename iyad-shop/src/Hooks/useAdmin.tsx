@@ -9,7 +9,7 @@ type AuthContextModelFallback = AuthContextModel & {
 const useAdmin = () => {
   const { user, loading } = useAuth() as AuthContextModelFallback;
   const [axiosSecure] = useAxiuseSecure();
-  // use axios secure with react query
+
   const { data: isAdmin, isLoading: isAdminLoading } = useQuery({
     queryKey: ["isAdmin", user?.email],
 

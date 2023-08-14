@@ -35,7 +35,7 @@ const DasNave = () => {
           {user ? (
             <img title={user.displayName} src={user.photoURL} />
           ) : (
-            <FaUserLarge className="text-xl" />
+            <FaUserLarge className="text-xl mt-2 ml-2" />
           )}
         </div>
       </label>
