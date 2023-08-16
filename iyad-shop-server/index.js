@@ -60,6 +60,9 @@ async function run() {
       .db("userDataStorege")
       .collection("favorite");
     const cartsCollection = client.db("userDataStorege").collection("cart");
+    const paymentCollection = client
+      .db("userDataStorege")
+      .collection("payment");
 
     // Admin secure JWT
     app.post("/jwt", (req, res) => {
@@ -251,21 +254,58 @@ async function run() {
 
     // payment section
 
+    // app.post("/create-payment-intent", async (req, res) => {
+    //   const { price } = req.body;
+    //   if (!price) {
+    //     return res.send({ message: "Price not valid" });
+    //   }
+    //   const amount = price * 100;
+    //   console.log(price, amount);
+    //   const paymentIntent = await stripe.paymentIntents.create({
+    //     amount: amount,
+    //     currency: "usd",
+    //     automatic_payment_methods: ["card"],
+    //   });
+    //   res.send({
+    //     clientSecret: paymentIntent.client_secret,
+    //   });
+    // });
     app.post("/create-payment-intent", async (req, res) => {
       const { price } = req.body;
+
       if (!price) {
         return res.send({ message: "Price not valid" });
       }
+
       const amount = price * 100;
-      console.log(price, amount);
-      const paymentIntent = await stripe.paymentIntents.create({
-        amount: amount,
-        currency: "usd",
-        automatic_payment_methods: ["card"],
-      });
-      res.send({
-        clientSecret: paymentIntent.client_secret,
-      });
+
+      try {
+        const paymentIntent = await stripe.paymentIntents.create({
+          amount: amount,
+          currency: "usd",
+        });
+
+        res.send({
+          clientSecret: paymentIntent.client_secret,
+        });
+      } catch (error) {
+        console.error("Error creating payment intent:", error.message);
+        res.status(500).send({ message: "Error creating payment intent" });
+      }
+    });
+
+    // payment releted Api
+
+    app.post("/payments", async (req, res) => {
+      const payment = req.body;
+      const insutResult = await paymentCollection.insertOne(payment);
+
+      const query = {
+        _id: { $in: payment.itemes.map((id) => new ObjectId(id)) },
+      };
+      const deleteResult = await cartsCollection.deleteMany(query);
+
+      res.send({ insutResult, deleteResult });
     });
 
     await client.db("admin").command({ ping: 1 });

@@ -89,7 +89,7 @@ const CartProduct = () => {
                 </td>
 
                 <td className="px-6 py-4">
-                  <div className=" ml-32">
+                  <div className=" ml-32 cursor-pointer">
                     <a
                       x-data="{ tooltip: 'Delete' }"
                       onClick={() => handelDelete(love._id)}

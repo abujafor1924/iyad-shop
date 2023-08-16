@@ -15,7 +15,7 @@ const Payment = () => {
         <h1>Payment</h1>
       </div>
       <Elements stripe={stripePromise}>
-        <ChackOutForm price={price}></ChackOutForm>
+        <ChackOutForm cart={cart} price={price}></ChackOutForm>
       </Elements>
     </div>
   );
