@@ -91,13 +91,13 @@ const AuthProvider = ({ children }: AuthProviderProps): JSX.Element => {
   useEffect(() => {
     const unsubsrcibe = auth.onAuthStateChanged((currentUser) => {
       setUser(currentUser);
-      console.log("set user", currentUser);
+      // console.log("set user", currentUser);
       // get set JWT token
       if (currentUser) {
         axios
           .post("http://localhost:5000/jwt", { email: currentUser.email })
           .then((data) => {
-            console.log(data.data.token);
+            // console.log(data.data.token);
             localStorage.setItem("acces-token", data.data.token);
             setLoading(false);
           });

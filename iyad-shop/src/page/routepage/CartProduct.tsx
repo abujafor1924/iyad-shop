@@ -4,9 +4,9 @@ import { toast } from "react-hot-toast";
 import { Link } from "react-router-dom";
 
 const CartProduct = () => {
-  const [cart, refetch] = useCart();
+  const [cart, refetch, loading] = useCart();
 
-  const total = cart.reduce((sum, item) => item.categoryitemId.price + sum, 0);
+  const total = cart.reduce((sum, item) => item.categoryitemId?.price + sum, 0);
 
   const handelDelete = (id) => {
     fetch(`http://localhost:5000/carts/${id}`, {
@@ -22,9 +22,9 @@ const CartProduct = () => {
   };
 
   return (
-    <div>
+    <div className="w-[100%] mt-24">
       <h1 className="text-2xl font-bold text-center my-6">Cart Product</h1>
-      <div className=" w-3/4 mx-auto overflow-hidden rounded-lg border border-gray-200 shadow-md m-5">
+      <div className=" w-12/12 mx-auto overflow-hidden rounded-lg border border-gray-200 shadow-md m-5">
         <table className="w-full border-collapse bg-white text-left text-sm text-gray-500">
           <thead className="bg-gray-50">
             <tr>
@@ -65,33 +65,31 @@ const CartProduct = () => {
           </thead>
           <tbody className="divide-y divide-gray-100 border-t border-gray-100">
             {cart.map((love) => (
-              <tr className="hover:bg-gray-50">
+              <tr key={love.categoryitemId?._id} className="hover:bg-gray-50">
                 <th className="flex gap-3 px-6 py-4 font-normal text-gray-900">
                   <div className="relative h-10 w-10">
                     <img
                       className="h-full w-full rounded-full object-cover object-center"
-                      src={love.categoryitemId.image}
+                      src={love.categoryitemId?.image}
                       alt=""
                     />
                   </div>
                   <div className="text-sm">
                     <div className="font-medium text-gray-700">
-                      {love.categoryitemId.name}
+                      {love.categoryitemId?.name}
                     </div>
                     <div className="text-gray-400">
-                      {love.categoryitemId.category}
+                      {love.categoryitemId?.category}
                     </div>
                   </div>
                 </th>
-
                 <td className="px-6 py-4">
-                  Price: ${love.categoryitemId.price}
+                  Price: ${love.categoryitemId?.price}
                 </td>
-
                 <td className="px-6 py-4">
                   <div className=" ml-32 cursor-pointer">
                     <a
-                      x-data="{ tooltip: 'Delete' }"
+                      x-data={{ tooltip: "Delete" }}
                       onClick={() => handelDelete(love._id)}
                     >
                       <FaTimes className="text-2xl font-medium" />

@@ -25,7 +25,7 @@ const Dashboard: () => JSX.Element = () => {
   const [isAdmin] = useAdmin();
   // const isAdmin = true;
   return (
-    <div className="drawer lg:drawer-open">
+    <div className="drawer lg:drawer-open w-[100%]">
       <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content flex flex-col items-center justify-center">
         {/* Page content here */}
@@ -112,7 +112,21 @@ const Dashboard: () => JSX.Element = () => {
             </>
           ) : (
             <>
-              <p>Customer panel</p>
+              <div>
+                <h1 className="my-5 text-red-200">IYAD SHOP</h1>
+                <ul>
+                  <li>
+                    <Link to={"/dashboard/user"}>Dashboard</Link>
+                  </li>
+                  <li>
+                    <Link to={"/dashboard/cart"}>Cart Product</Link>
+                  </li>
+
+                  <li>
+                    <Link to={"/dashboard/payHistory"}>payment History</Link>
+                  </li>
+                </ul>
+              </div>
             </>
           )}
         </ul>

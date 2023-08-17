@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 const TopBar = () => {
   return (
-    <div className="flex  justify-between ">
+    <div className="flex  justify-between ml-10 ">
       <ul className="flex justify-between py-1 border-b-2">
         <div className="flex justify-start ml-5">
           <li>Welcome to Our store IyadShop</li>
@@ -23,7 +23,7 @@ const TopBar = () => {
             </Link>
           </li>
           <li>
-            <Link to={"/dashboard/admin"} className="ml-6">
+            <Link to={"/dashboard"} className="ml-6">
               Deshboard
             </Link>
           </li>

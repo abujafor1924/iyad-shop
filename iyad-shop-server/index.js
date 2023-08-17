@@ -181,6 +181,13 @@ async function run() {
       res.send(result);
     });
 
+    app.get("/allProduct/category/:category", async (req, res) => {
+      const category = req.params.category;
+      console.log(category);
+      const products = await productCollection.find({ category }).toArray();
+      res.json(products);
+    });
+
     app.post("/addProduct", async (req, res) => {
       const newItem = req.body;
       const result = await productCollection.insertOne(newItem);
@@ -210,7 +217,14 @@ async function run() {
     // favorite section
 
     app.get("/favorite", async (req, res) => {
-      const result = await favoritCollection.find().toArray();
+      const email = req.query.email;
+      // console.log(email);
+      if (!email) {
+        res.send("Email parameter is missing");
+      }
+      const query = { "favorite.email": email };
+      // console.log(query);
+      const result = await favoritCollection.find(query).toArray();
       res.send(result);
     });
 
@@ -296,6 +310,17 @@ async function run() {
 
     // payment releted Api
 
+    app.get("/payments", async (req, res) => {
+      const email = req.query.email;
+      // console.log(email);
+      if (!email) {
+        res.send("Email parameter is missing");
+      }
+      const query = { email: email };
+      const result = await paymentCollection.find(query).toArray();
+      res.send(result);
+    });
+
     app.post("/payments", async (req, res) => {
       const payment = req.body;
       const insutResult = await paymentCollection.insertOne(payment);
@@ -306,6 +331,52 @@ async function run() {
       const deleteResult = await cartsCollection.deleteMany(query);
 
       res.send({ insutResult, deleteResult });
+    });
+
+    // admin dashboard
+
+    app.get("/admin-status", async (req, res) => {
+      const users = await userCollection.estimatedDocumentCount();
+      const producs = await productCollection.estimatedDocumentCount();
+      const order = await paymentCollection.estimatedDocumentCount();
+      const payments = await paymentCollection.find().toArray();
+      const revenue = payments.reduce((sum, payment) => sum + payment.price, 0);
+
+      res.send({ users, producs, order, revenue });
+    });
+
+    app.get("/orderstats", async (req, res) => {
+      const pipeline = [
+        {
+          $lookup: {
+            from: "allCategory",
+            localField: " itemeOrderId ",
+            foreignField: "_id",
+            as: "menuItemsData",
+          },
+        },
+        {
+          $unwind: "$menuItemsData",
+        },
+        {
+          $group: {
+            _id: "$menuItemsData.category",
+            count: { $sum: 1 },
+            total: { $sum: "$menuItemsData.price" },
+          },
+        },
+        {
+          $project: {
+            category: "$_id",
+            count: 1,
+            total: { $round: ["$total", 2] },
+            _id: 0,
+          },
+        },
+      ];
+
+      const result = await paymentCollection.aggregate(pipeline).toArray();
+      res.send(result);
     });
 
     await client.db("admin").command({ ping: 1 });

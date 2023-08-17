@@ -26,6 +26,8 @@ import UpdateProduct from "../page/Dashboard/product/UpdateProduct";
 import Favorite from "../page/Home/productmng/Favorite";
 import CartProduct from "../page/routepage/CartProduct";
 import Payment from "../page/Dashboard/Pyment/Payment";
+import PaymentHistory from "../page/routepage/PaymentHistory";
+import UserDesh from "../page/routepage/UserDesh";
 
 const router = createBrowserRouter([
   {
@@ -44,10 +46,6 @@ const router = createBrowserRouter([
       {
         path: "/registretion",
         element: <Registretion />,
-      },
-      {
-        path: "/cart",
-        element: <CartProduct />,
       },
 
       {
@@ -118,6 +116,21 @@ const router = createBrowserRouter([
         element: <UpdateProduct />,
         loader: ({ params }) =>
           fetch(`http://localhost:5000/allProduct/${params.id}`),
+      },
+
+      // CUSTOMER PANELL
+
+      {
+        path: "/dashboard/user",
+        element: <UserDesh />,
+      },
+      {
+        path: "/dashboard/cart",
+        element: <CartProduct />,
+      },
+      {
+        path: "/dashboard/payHistory",
+        element: <PaymentHistory />,
       },
     ],
   },

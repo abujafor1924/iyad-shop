@@ -28,7 +28,7 @@ const AllProduct = () => {
   };
   return (
     <>
-      <h1 className="text-2xl font-bold">
+      <h1 className="text-2xl font-bold mt-32">
         All Product : <span className="text-red-500">{category.length}</span>
       </h1>
       <div>

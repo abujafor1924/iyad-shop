@@ -2,12 +2,14 @@ import { useQuery } from "@tanstack/react-query";
 import useAxiuseSecure from "../../../Hooks/useAxiuseSecure";
 import { toast } from "react-hot-toast";
 import { FaTimes } from "react-icons/fa";
+import useAuth from "../../../Hooks/useAuth";
 
 const Favorite = () => {
+  const { user } = useAuth();
   const [axiosSecure] = useAxiuseSecure();
   const { data: favorite = [], refetch } = useQuery({
     queryFn: async () => {
-      const res = await axiosSecure.get(`favorite`);
+      const res = await axiosSecure.get(`/favorite?email=${user?.email}`);
       return res.data;
     },
   });
@@ -48,22 +50,26 @@ const Favorite = () => {
           </thead>
           <tbody className="divide-y divide-gray-100 border-t border-gray-100">
             {favorite.map((love) => (
-              <tr className="hover:bg-gray-50">
+              <tr key={love._id} className="hover:bg-gray-50">
                 <th className="flex gap-3 px-6 py-4 font-normal text-gray-900">
                   <div className="relative h-10 w-10">
                     <img
                       className="h-full w-full rounded-full object-cover object-center"
-                      src={love.image}
+                      src={love.favorite?.image}
                       alt=""
                     />
                   </div>
                   <div className="text-sm">
-                    <div className="font-medium text-gray-700">{love.name}</div>
-                    <div className="text-gray-400">{love.category}</div>
+                    <div className="font-medium text-gray-700">
+                      {love.favorite?.name}
+                    </div>
+                    <div className="text-gray-400">
+                      {love.favorite?.category}
+                    </div>
                   </div>
                 </th>
 
-                <td className="px-6 py-4"> Price: ${love.price}</td>
+                <td className="px-6 py-4"> Price: ${love.favorite?.price}</td>
 
                 <td className="px-6 py-4">
                   <div className=" ml-32">
@@ -71,7 +77,7 @@ const Favorite = () => {
                       x-data="{ tooltip: 'Delete' }"
                       onClick={() => handleFvDelete(love._id)}
                     >
-                      <FaTimes className="text-2xl font-medium" />
+                      <FaTimes className="text-2xl font-medium cursor-pointer" />
                     </a>
                   </div>
                 </td>

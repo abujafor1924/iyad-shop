@@ -1,11 +1,10 @@
 import "react-tabs/style/react-tabs.css";
 
-import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 
 import { FaCodeCompare, FaRegHeart } from "react-icons/fa6";
 import { toast } from "react-hot-toast";
-import useAxiuseSecure from "../../Hooks/useAxiuseSecure";
+
 import useAuth from "../../Hooks/useAuth";
 
 interface Category {
@@ -29,41 +28,57 @@ import "swiper/css/pagination";
 
 // import required modules
 import { Pagination } from "swiper/modules";
+import axios from "axios";
 
 const Test = () => {
   const { user } = useAuth();
-  const [isProduct, setIsProduct] = useState<string>("");
-  const [bestProduct, setBestProduct] = useState<Product[]>([]);
-  const [axiosSecure] = useAxiuseSecure();
-  const { data: categories = [], refetch } = useQuery<Category[]>({
-    queryFn: async () => {
-      const res = await axiosSecure.get(`allCategory`);
-      return res.data;
-    },
-  });
+
+  const [productCategories, setProductCategories] = useState({});
 
   useEffect(() => {
-    fetch(`http://localhost:5000/getparoduct?cat=${isProduct}`)
-      .then((res) => res.json())
-      .then((data) => {
-        // console.log(data);
-        setBestProduct(data);
+    axios
+      .get(`http://localhost:5000/allProduct`)
+      .then((response) => {
+        const products = response.data;
+
+        // Organize products by category
+        const categorizedProducts = {};
+        products.forEach((product) => {
+          const category = product.category;
+          if (!categorizedProducts[category]) {
+            categorizedProducts[category] = [];
+          }
+          categorizedProducts[category].push(product);
+        });
+
+        setProductCategories(categorizedProducts);
+      })
+      .catch((error) => {
+        console.error("Error fetching products:", error);
       });
-  }, [isProduct]);
+  }, []);
 
   const handeleFavorite = (pd) => {
     const { name, category, price, image } = pd;
-    fetch("http://localhost:5000/favorite", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, category, price, image }),
-    })
-      .then((res) => res.json())
-      .then((result) => {
-        console.log(result);
-        refetch();
-        toast.success("Add Favorite successful");
-      });
+    if (user && user.email) {
+      const favorite = {
+        name,
+        category,
+        price,
+        image,
+        email: user.email,
+      };
+      fetch("http://localhost:5000/favorite", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ favorite }),
+      })
+        .then((res) => res.json())
+        .then((result) => {
+          console.log(result);
+          toast.success("Add to Favorite SuccessFull");
+        });
+    }
   };
 
   const handleCart = (id) => {
@@ -93,21 +108,12 @@ const Test = () => {
   };
 
   return (
-    <div className=" w-11/12 mx-auto mb-10 ">
-      <div>
-        {categories.map((tb) => (
-          <div key={tb._id} onClick={() => setIsProduct(tb.categories)}>
-            {/* {tb.categories} */}
-          </div>
-        ))}
-      </div>
-      {/* <h1>{bestProduct.length}</h1> */}
-
-      {categories.map((tb) => (
-        <div key={tb._id} className="py-4 my-6  bg-white px-4 rounded">
+    <div className=" px-7 mx-auto mb-10 ">
+      {Object.entries(productCategories).map(([category, products]) => (
+        <div key={category} className="py-4 my-6  bg-white px-4 rounded">
           <div className="text-2xl font-bold flex justify-between border-b-2 border-gray-200 bg-white">
-            <h1 className="mt-6">{tb.categories}</h1>
-            <button className="btn btn-success my-4">Vew</button>
+            <h1 className="mt-6">{category}</h1>
+            <button className="btn bg-[#9F1239] my-4">Vew</button>
           </div>
           <div className=" mt-4 bg-white">
             <Swiper
@@ -119,20 +125,20 @@ const Test = () => {
               modules={[Pagination]}
               className="mySwiper"
             >
-              {bestProduct.map((pd) => (
-                <SwiperSlide key={pd._id}>
-                  <div className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+              {products.map((product) => (
+                <SwiperSlide key={product._id}>
+                  <div className="border-2 hover:border-[#991B1B] bor w-full max-w-sm bg-white   rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
                     <a>
                       <img
                         className="w-full h-52 mb-6 rounded-t-lg"
-                        src={pd.image}
+                        src={product.image}
                         alt="product image"
                       />
                     </a>
                     <div className="px-5 pb-5">
                       <a href="#">
                         <h5 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">
-                          {pd.name}
+                          {product.name}
                         </h5>
                       </a>
                       <div className="flex items-center mt-2.5 mb-5">
@@ -186,7 +192,7 @@ const Test = () => {
                         </span>
 
                         <button
-                          onClick={() => handeleFavorite(pd)}
+                          onClick={() => handeleFavorite(product)}
                           className="p-1 ml-12"
                         >
                           <FaRegHeart className="text-xl" />
@@ -197,10 +203,10 @@ const Test = () => {
                       </div>
                       <div className="flex items-center justify-between">
                         <span className="text-3xl font-bold text-gray-900 dark:text-white">
-                          $<span>{pd.price}</span>
+                          $<span>{product.price}</span>
                         </span>
                         <button
-                          onClick={() => handleCart(pd)}
+                          onClick={() => handleCart(product)}
                           className="text-white bg-[#9F1239] hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                         >
                           Add to cart

@@ -56,7 +56,7 @@ const MackAdmin = () => {
         <div className="overflow-x-auto">
           <table className="table ">
             <thead>
-              <tr className="text-2xl font-semibold text-black bg-slate-400">
+              <tr className="text-2xl font-semibold text-black">
                 <th className="px-10">#</th>
                 <th className="px-10">Name</th>
                 <th className="px-10">Email</th>
@@ -66,7 +66,7 @@ const MackAdmin = () => {
             </thead>
             <tbody>
               {users.map((user: User, index: number) => (
-                <tr key={user._id} className="text-xl  text-black bg-red-400">
+                <tr key={user._id} className="text-xl  text-black ">
                   <td className="px-10">{index + 1}</td>
                   <td className="px-10">{user.name}</td>
                   <td className="px-10">{user.email}</td>

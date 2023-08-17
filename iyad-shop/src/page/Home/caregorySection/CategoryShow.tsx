@@ -52,13 +52,13 @@ const CategoryShow: React.FC = () => {
       .then((res) => res.json())
       .then((result) => {
         console.log(result);
-
+        refetch();
         toast.success("Add Favorite successful");
       });
   };
 
-  const handleCart = (id) => {
-    const { name, category, price, image, quantity, description, _id } = id;
+  const handleCart = (pd) => {
+    const { name, category, price, image, quantity, description, _id } = pd;
     if (user && user.email) {
       const categoryitemId = {
         orderId: _id,
@@ -89,7 +89,7 @@ const CategoryShow: React.FC = () => {
       <TabList>
         {categories.map((tb) => (
           <Tab key={tb._id} onClick={() => setIsProduct(tb.categories)}>
-            {tb.categories}
+            {tb?.categories}
           </Tab>
         ))}
       </TabList>
@@ -99,44 +99,18 @@ const CategoryShow: React.FC = () => {
         <TabPanel key={tb._id}>
           <div className="grid grid-cols-4 gap-4 mt-12">
             {bestProduct.map((pd) => (
-              // <div key={pd._id}>
-              //   <div className="card w-72 h-96 bg-base-100 shadow-xl my-4">
-              //     <figure className="px-10 pt-10">
-              //       <img
-              //         src={pd.image}
-              //         alt="Shoes"
-              //         className="rounded w-64 h-48 my-4 "
-              //       />
-              //     </figure>
-              //     <div className="card-body items-center text-center">
-              //       <div className="card-actions">
-              //         <button className="btn btn-ghost px-16 bg-slate-100 ">
-              //           Add To Cart
-              //         </button>
-              //       </div>
-              //       <h2 className="text-sm text-slate-900 ">{pd.name}</h2>
-              //       <p>
-              //         Price :{" "}
-              //         <span className="text-red-600 text-xl font-medium">
-              //           ${pd.price}
-              //         </span>
-              //       </p>
-              //     </div>
-              //   </div>
-              // </div>
-
               <div className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
                 <a>
                   <img
                     className="w-full h-52 mb-6 rounded-t-lg"
-                    src={pd.image}
+                    src={pd?.image}
                     alt="product image"
                   />
                 </a>
                 <div className="px-5 pb-5">
                   <a>
                     <h5 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">
-                      {pd.name}
+                      {pd?.name}
                     </h5>
                   </a>
                   <div className="flex items-center mt-2.5 mb-5">
@@ -201,7 +175,7 @@ const CategoryShow: React.FC = () => {
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-3xl font-bold text-gray-900 dark:text-white">
-                      $<span>{pd.price}</span>
+                      $<span>{pd?.price}</span>
                     </span>
                     <button
                       onClick={() => handleCart(pd)}

@@ -24,8 +24,8 @@ const Navbar = () => {
   return (
     <div className="flex flex-wrap  ">
       <section className="relative mx-auto">
-        <nav className="flex justify-between bg-gray-200 text-black w-screen">
-          <div className="px-5 xl:px-12 py-6 flex w-full items-center">
+        <nav className="flex justify-between text-black w-screen">
+          <div className="  py-6 px-4 flex w-[90%] ml-6 items-center">
             <a className="text-3xl font-bold font-heading" href="#">
               <span className="flex">
                 <FaItalic className="-mr-1 mt-1 text-rose-800" />
@@ -33,7 +33,7 @@ const Navbar = () => {
               </span>
             </a>
 
-            <ul className="hidden md:flex px-4 mx-auto font-semibold font-heading space-x-12">
+            <ul className="hidden md:flex px-4 mx-auto font-semibold font-heading space-x-12 ">
               <li>
                 <Link to={"/"} className="hover:text-gray-200">
                   Home
@@ -67,7 +67,7 @@ const Navbar = () => {
                   <FaRegHeart className="text-xl" />
                 </Link>
               </li>
-              <Link to={"/cart"} className="flex items-center ">
+              <Link to={"/dashboard/cart"} className="flex items-center ">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="h-6 w-6"

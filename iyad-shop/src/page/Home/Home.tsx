@@ -1,23 +1,26 @@
+import Test from "../Error/Test";
+
 import Catagorybar from "../Navbar/Catagorybar";
 import Navbar from "../Navbar/Navbar";
+import TopBar from "../Navbar/TopBar";
 
 import MainBannar from "./Bannar/MainBannar";
 
 import Footer from "./Footer/Footer";
-import CategoryShow from "./caregorySection/CategoryShow";
 
 const Home = () => {
   return (
     <div>
+      <TopBar />
       <Navbar />
       <Catagorybar />
       <MainBannar />
       {/* <NewArible /> */}
       {/* <BestSell /> */}
-
-      {/* <Test /> */}
+      {/* <Tost /> */}
+      <Test />
       {/* <AdBanner /> */}
-      <CategoryShow />
+      {/* <CategoryShow /> */}
 
       <Footer />
     </div>

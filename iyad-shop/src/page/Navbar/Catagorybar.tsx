@@ -28,7 +28,7 @@ const Catagorybar = () => {
   }, [isProduct]);
 
   return (
-    <form className="bg-gray-200">
+    <form>
       <div className="flex mx-10 relative ">
         <button
           onClick={handleDropdownToggle}
