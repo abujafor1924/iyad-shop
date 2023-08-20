@@ -17,7 +17,7 @@ const AddCategory = () => {
   } = useForm<Inputs>();
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     console.log(data);
-    fetch("http://localhost:5000/addCategory", {
+    fetch("https://iyad-shop-server.vercel.app/addCategory", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),

@@ -35,6 +35,7 @@ export interface AuthContextModel {
   logOut: () => Promise<void>;
   updateUser: (displayName: string, photoURL: string) => Promise<void>;
   googleLoge: () => Promise<UserCredential>;
+  loading: boolean;
 }
 
 export const AuthContext = React.createContext<AuthContextModel>(
@@ -45,7 +46,7 @@ const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider();
 const AuthProvider = ({ children }: AuthProviderProps): JSX.Element => {
   const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState<boolean>(true);
 
   const createUser = (
     email: string,
@@ -95,7 +96,9 @@ const AuthProvider = ({ children }: AuthProviderProps): JSX.Element => {
       // get set JWT token
       if (currentUser) {
         axios
-          .post("http://localhost:5000/jwt", { email: currentUser.email })
+          .post("https://iyad-shop-server.vercel.app/jwt", {
+            email: currentUser.email,
+          })
           .then((data) => {
             // console.log(data.data.token);
             localStorage.setItem("acces-token", data.data.token);

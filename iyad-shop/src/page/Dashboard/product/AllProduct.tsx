@@ -4,6 +4,14 @@ import { toast } from "react-hot-toast";
 import { FaRegPenToSquare, FaTrashCan } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 
+type Product = {
+  _id: number; // Adjust the type of '_id' according to your data structure
+  image: string;
+  name: string;
+  category: string;
+  price: number;
+  quantity: number;
+};
 const AllProduct = () => {
   const [axiosSecure] = useAxiuseSecure();
   const { data: category = [], refetch } = useQuery({
@@ -15,7 +23,7 @@ const AllProduct = () => {
 
   const handelProductDelete = (id: number) => {
     console.log(id);
-    fetch(`http://localhost:5000/allProduct/${id}`, {
+    fetch(`https://iyad-shop-server.vercel.app/allProduct/${id}`, {
       method: "DELETE",
     })
       .then((res) => res.json())
@@ -151,7 +159,7 @@ const AllProduct = () => {
               </tr>
             </thead>
             <tbody>
-              {category.map((pd) => (
+              {category.map((pd: Product) => (
                 <tr
                   key={pd._id}
                   className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"

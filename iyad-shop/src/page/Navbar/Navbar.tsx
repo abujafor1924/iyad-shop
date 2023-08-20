@@ -101,9 +101,9 @@ const Navbar = () => {
                           <label className="btn btn-ghost btn-circle avatar">
                             <div className="w-10 rounded-full ">
                               <img
-                                title={user?.displayName}
+                                title={user?.displayName || undefined}
                                 // className="rounded-full"
-                                src={user.photoURL}
+                                src={user?.photoURL || ""}
                               />
                             </div>
                           </label>
@@ -115,16 +115,26 @@ const Navbar = () => {
                     <p className="text-xl font-semibold mt-4"></p>
                   </li>
                   {isDropdownOpen && (
-                    <ul className="dropdown-menu z-10 text-2xl font-semibold absolute bg-white mt-2 -ml-16">
+                    <ul className="dropdown-menu z-10 text-2xl font-semibold absolute bg-slate-200 mt-2 px-6 py-4 -ml-24">
                       {user ? (
-                        <button onClick={handleLogOut} className="mt-2">
+                        <button
+                          onClick={handleLogOut}
+                          className="btn btn-outline"
+                        >
                           Log Out
                         </button>
                       ) : (
                         <>
-                          <Link to={"/login"}>Login</Link>
+                          <Link to={"/login"} className="btn btn-outline ">
+                            Login
+                          </Link>
                           <br />
-                          <Link to={"/registretion"}>Resistretion</Link>
+                          <Link
+                            to={"/registretion"}
+                            className="btn btn-outline  my-4"
+                          >
+                            Resistretion
+                          </Link>
                         </>
                       )}
                     </ul>

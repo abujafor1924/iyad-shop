@@ -7,12 +7,20 @@ type Inputs = {
   name: string;
   description: string;
   category: string;
-  quantity: number | any;
-  price: number | any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  quantity: string | any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  price: string | any;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   image: File | any;
   recipe: string;
+  date: string[] | undefined;
 };
+
+interface Category {
+  _id: string;
+  categories: string;
+}
 const image_hoisting_token = import.meta.env.VITE_image_uplode_token;
 
 const AddProduct = () => {
@@ -68,6 +76,9 @@ const AddProduct = () => {
       });
   };
 
+  const currentDate = new Date();
+  const formattedDate = currentDate.toISOString().split("T")[0];
+
   return (
     <div>
       <h1 className="text-2xl pt-24 font-bold pb-4 ">Add Product</h1>
@@ -92,7 +103,7 @@ const AddProduct = () => {
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           >
             <option value={""}>Choose a Category</option>
-            {category.map((cd) => (
+            {category.map((cd: Category) => (
               <option key={cd._id} value={cd.categories}>
                 {cd.categories}
               </option>
@@ -117,6 +128,16 @@ const AddProduct = () => {
             className="  block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50  focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           />
           {errors.price && <span>This field is required</span>}
+        </div>
+        <div className=" my-4 mt-4">
+          <h1 className="mt-1 my-4 mr-2 w-32">Date</h1>
+          <input
+            type="text"
+            value={formattedDate}
+            {...register("date", { required: true })}
+            className="  block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50  focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          />
+          {errors.date && <span>This field is required</span>}
         </div>
         <div className=" my-4 mt-4">
           <h1 className="mt-1 my-4 mr-2 w-32">Image</h1>

@@ -4,7 +4,7 @@ import axios from "axios";
 import { useEffect } from "react";
 
 const axiosSecure = axios.create({
-  baseURL: "http://localhost:5000/",
+  baseURL: "https://iyad-shop-server.vercel.app/",
 });
 
 const useAxiuseSecure = () => {

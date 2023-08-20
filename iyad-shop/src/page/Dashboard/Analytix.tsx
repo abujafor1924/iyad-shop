@@ -1,7 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
 import useAxiuseSecure from "../../Hooks/useAxiuseSecure";
-import Example from "./Chart/PiyChart";
-import App from "./Chart/BarChart";
 
 const Analytix = () => {
   const [axiosSecure] = useAxiuseSecure();
@@ -43,13 +41,11 @@ const Analytix = () => {
             </div>
           </div>
         </div>
-        <div className="w-1/2">
-          <Example />
-        </div>
+        <div className="w-1/2">{/* <Example /> */}</div>
       </div>
       <div className="flex justify-between">
-        <App />
-        <App />
+        {/* <App /> */}
+        {/* <App /> */}
       </div>
     </div>
   );

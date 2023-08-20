@@ -33,7 +33,7 @@ const DasNave = () => {
       <label className="btn btn-ghost btn-circle avatar mr-10">
         <div className=" w-10 rounded-full">
           {user ? (
-            <img title={user.displayName} src={user.photoURL} />
+            <img title={user?.displayName ?? ""} src={user.photoURL ?? ""} />
           ) : (
             <FaUserLarge className="text-xl mt-2 ml-2" />
           )}

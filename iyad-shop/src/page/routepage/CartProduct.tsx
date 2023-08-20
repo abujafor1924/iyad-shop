@@ -3,13 +3,26 @@ import useCart from "../../Hooks/useCart";
 import { toast } from "react-hot-toast";
 import { Link } from "react-router-dom";
 
+interface CartItem {
+  _id: string;
+  categoryitemId: {
+    _id: string;
+    name: string;
+    category: string;
+    price: number;
+    image: string;
+  };
+}
 const CartProduct = () => {
-  const [cart, refetch, loading] = useCart();
+  const [cart, refetch] = useCart();
 
-  const total = cart.reduce((sum, item) => item.categoryitemId?.price + sum, 0);
+  const total = cart.reduce(
+    (sum: number, item: CartItem) => item.categoryitemId?.price + sum,
+    0
+  );
 
-  const handelDelete = (id) => {
-    fetch(`http://localhost:5000/carts/${id}`, {
+  const handelDelete = (id: string) => {
+    fetch(`https://iyad-shop-server.vercel.app/carts/${id}`, {
       method: "DELETE",
     })
       .then((res) => res.json())
@@ -64,7 +77,7 @@ const CartProduct = () => {
             </tr> */}
           </thead>
           <tbody className="divide-y divide-gray-100 border-t border-gray-100">
-            {cart.map((love) => (
+            {cart.map((love: CartItem) => (
               <tr key={love.categoryitemId?._id} className="hover:bg-gray-50">
                 <th className="flex gap-3 px-6 py-4 font-normal text-gray-900">
                   <div className="relative h-10 w-10">

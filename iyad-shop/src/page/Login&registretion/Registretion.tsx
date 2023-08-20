@@ -54,7 +54,7 @@ const Registretion = () => {
                     email: data.email,
                     photo: imgUrl,
                   };
-                  fetch("http://localhost:5000/users", {
+                  fetch("https://iyad-shop-server.vercel.app/users", {
                     method: "POST",
                     headers: {
                       "content-type": "application/json",

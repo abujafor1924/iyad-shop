@@ -3,6 +3,10 @@ import useAxiuseSecure from "../../Hooks/useAxiuseSecure";
 import { useQuery } from "@tanstack/react-query";
 import { FaAngleRight } from "react-icons/fa6";
 
+interface Category {
+  _id: string; // Adjust the type if needed
+  categories: string; // Adjust the type if needed
+}
 const Catagorybar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(true);
   const [isProduct, setIsProduct] = useState("");
@@ -20,9 +24,9 @@ const Catagorybar = () => {
   });
 
   useEffect(() => {
-    fetch(`http://localhost:5000/getparoduct?cat=${isProduct}`)
+    fetch(`https://iyad-shop-server.vercel.app/getparoduct?cat=${isProduct}`)
       .then((res) => res.json())
-      .then((data) => {
+      .then(() => {
         // console.log(data);
       });
   }, [isProduct]);
@@ -59,7 +63,7 @@ const Catagorybar = () => {
         >
           {isDropdownOpen && (
             <>
-              {categories.map((ct) => (
+              {categories.map((ct: Category) => (
                 <li key={ct._id}>
                   <button
                     type="button"

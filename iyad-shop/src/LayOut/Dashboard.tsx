@@ -35,7 +35,7 @@ const Dashboard: () => JSX.Element = () => {
       <div className="drawer-side">
         <label htmlFor="my-drawer-2" className="drawer-overlay"></label>
 
-        <ul className=" hover:bg-slate-950 px-3 py-3 p-4 w-80 h-full  bg-slate-800 text-white  text-2xl font-semibold">
+        <ul className=" hover:bg-slate-950 px-3 py-3 p-4  h-full  bg-slate-800 text-white  text-2xl font-semibold">
           {isAdmin ? (
             <>
               <span className="flex ml-3 my-6">

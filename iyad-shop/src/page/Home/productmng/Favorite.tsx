@@ -4,19 +4,28 @@ import { toast } from "react-hot-toast";
 import { FaTimes } from "react-icons/fa";
 import useAuth from "../../../Hooks/useAuth";
 
+interface FavoriteItem {
+  _id: string;
+  favorite: {
+    image: string;
+    name: string;
+    category: string;
+    price: number;
+  };
+}
 const Favorite = () => {
   const { user } = useAuth();
   const [axiosSecure] = useAxiuseSecure();
-  const { data: favorite = [], refetch } = useQuery({
+  const { data: favorite = [], refetch } = useQuery<FavoriteItem[]>({
     queryFn: async () => {
       const res = await axiosSecure.get(`/favorite?email=${user?.email}`);
       return res.data;
     },
   });
 
-  const handleFvDelete = (id) => {
+  const handleFvDelete = (id: string) => {
     console.log(id);
-    fetch(`http://localhost:5000/favorite/${id}`, {
+    fetch(`https://iyad-shop-server.vercel.app/favorite/${id}`, {
       method: "DELETE",
     })
       .then((res) => res.json())
@@ -49,7 +58,7 @@ const Favorite = () => {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100 border-t border-gray-100">
-            {favorite.map((love) => (
+            {favorite.map((love: FavoriteItem) => (
               <tr key={love._id} className="hover:bg-gray-50">
                 <th className="flex gap-3 px-6 py-4 font-normal text-gray-900">
                   <div className="relative h-10 w-10">

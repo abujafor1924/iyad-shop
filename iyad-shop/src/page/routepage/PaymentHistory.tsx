@@ -1,6 +1,12 @@
 import { Link } from "react-router-dom";
 import usePament from "../../Hooks/usePament";
 
+interface PaymentHistoryItem {
+  _id: string;
+  itemeName: string;
+  date: string;
+  status: string;
+}
 const PaymentHistory = () => {
   const [payHistory, refetch] = usePament();
   console.log(payHistory);
@@ -35,7 +41,7 @@ const PaymentHistory = () => {
           </thead>
           <tbody className="divide-y divide-gray-100 border-t border-gray-100">
             {payHistory ? (
-              payHistory.map((py) => (
+              payHistory.map((py: PaymentHistoryItem) => (
                 <tr key={py._id} className="hover:bg-gray-50">
                   <th className="flex gap-3 px-6 py-4 font-normal text-gray-900">
                     <div className="text-sm">

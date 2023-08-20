@@ -1,5 +1,5 @@
-const MainCategory = ({ ct }) => {
-  return <div></div>;
-};
+// const MainCategory = ({ ct }) => {
+//   return <div></div>;
+// };
 
-export default MainCategory;
+// export default MainCategory;

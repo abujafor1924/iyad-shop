@@ -19,7 +19,7 @@ const Category = () => {
 
   const handelDelete = (id: number) => {
     console.log(id);
-    fetch(`http://localhost:5000/allCategory/${id}`, {
+    fetch(`https://iyad-shop-server.vercel.app/allCategory/${id}`, {
       method: "DELETE",
     })
       .then((res) => res.json())

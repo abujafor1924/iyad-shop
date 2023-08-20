@@ -7,8 +7,12 @@ const stripePromise = loadStripe(import.meta.env.VITE_pyment_token);
 const Payment = () => {
   const [cart] = useCart();
 
-  const total = cart.reduce((sum, item) => item.categoryitemId.price + sum, 0);
-  const price = parseFloat(total.toFixed(2));
+  const total = cart.reduce(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (sum: number, item: any) => item.categoryitemId.price + sum,
+    0
+  );
+  const price: number = parseFloat(total.toFixed(2));
   return (
     <div>
       <div className="text-2xl font-bold text-center text-blue-600 my-8">

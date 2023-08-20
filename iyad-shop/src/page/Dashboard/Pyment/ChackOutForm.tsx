@@ -4,7 +4,12 @@ import useAxiuseSecure from "../../../Hooks/useAxiuseSecure";
 import useAuth from "../../../Hooks/useAuth";
 import { toast } from "react-hot-toast";
 
-const ChackOutForm = ({ price, cart }) => {
+interface ChackOutFormProps {
+  price: number; // Specify the correct type here
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  cart: any[]; // Or provide a type for 'cart' if possible
+}
+const ChackOutForm: React.FC<ChackOutFormProps> = ({ price, cart }) => {
   const stripe = useStripe();
   const elements = useElements();
   const { user } = useAuth();
@@ -23,7 +28,7 @@ const ChackOutForm = ({ price, cart }) => {
     }
   }, [price, axiosSecure]);
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (!stripe || !elements) {
@@ -70,7 +75,7 @@ const ChackOutForm = ({ price, cart }) => {
     console.log("payment intent", paymentIntent);
 
     setProcessing(false);
-    if (paymentIntent.status === "succeeded") {
+    if (paymentIntent && paymentIntent.status === "succeeded") {
       setTransectionId(paymentIntent.id);
       // save payment info server
       const payment = {
@@ -87,7 +92,7 @@ const ChackOutForm = ({ price, cart }) => {
       axiosSecure.post("/payments", payment).then((res) => {
         console.log(res.data);
         if (res.data.result.insertedId) {
-          // toast.success("Remove Cart Product");
+          toast.success("Remove Cart Product");
         }
       });
     }

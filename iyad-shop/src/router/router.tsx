@@ -28,6 +28,7 @@ import CartProduct from "../page/routepage/CartProduct";
 import Payment from "../page/Dashboard/Pyment/Payment";
 import PaymentHistory from "../page/routepage/PaymentHistory";
 import UserDesh from "../page/routepage/UserDesh";
+import VewDetails from "../page/routepage/VewDetails";
 
 const router = createBrowserRouter([
   {
@@ -59,6 +60,12 @@ const router = createBrowserRouter([
       {
         path: "/favorite",
         element: <Favorite />,
+      },
+      {
+        path: "/vew/:id",
+        element: <VewDetails />,
+        loader: ({ params }) =>
+          fetch(`https://iyad-shop-server.vercel.app/allProduct/${params.id}`),
       },
       {
         path: "/payment",
@@ -115,7 +122,7 @@ const router = createBrowserRouter([
         path: "/dashboard/update/:id",
         element: <UpdateProduct />,
         loader: ({ params }) =>
-          fetch(`http://localhost:5000/allProduct/${params.id}`),
+          fetch(`https://iyad-shop-server.vercel.app/allProduct/${params.id}`),
       },
 
       // CUSTOMER PANELL

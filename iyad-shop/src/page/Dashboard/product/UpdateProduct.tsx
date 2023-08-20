@@ -4,13 +4,22 @@ import { useLoaderData } from "react-router-dom";
 
 type Inputs = {
   name: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   quantity: number | any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   price: number | any;
 };
 
-const UpdateProduct = () => {
-  const product = useLoaderData();
+interface ProductData {
+  _id: string;
+  name: string;
+  // Other properties...
+}
+const UpdateProduct: React.FC = () => {
+  const product = useLoaderData() as ProductData;
   const { _id, name } = product;
+  console.log(product);
+
   const {
     register,
     handleSubmit,
@@ -21,7 +30,7 @@ const UpdateProduct = () => {
   // Add product
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
-    fetch(`http://localhost:5000/allProductUpdate/${_id}`, {
+    fetch(`https://iyad-shop-server.vercel.app/allProductUpdate/${_id}`, {
       method: "PATCH",
 
       headers: {
@@ -49,7 +58,7 @@ const UpdateProduct = () => {
           <h1 className="mt-1 my-4 mr-2 w-32">Parduct Name</h1>
           <input
             type="text"
-            defaultValue={name}
+            value={name}
             {...register("name", { required: true })}
             className="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50  focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           />
