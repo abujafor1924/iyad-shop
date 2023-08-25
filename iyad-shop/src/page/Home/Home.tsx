@@ -7,6 +7,7 @@ import TopBar from "../Navbar/TopBar";
 import MainBannar from "./Bannar/MainBannar";
 
 import Footer from "./Footer/Footer";
+import NewArible from "./caregorySection/NewArible";
 
 const Home = () => {
   return (
@@ -18,6 +19,7 @@ const Home = () => {
       {/* <NewArible /> */}
       {/* <BestSell /> */}
       {/* <Tost /> */}
+      <NewArible />
       <Test />
       {/* <AdBanner /> */}
       {/* <CategoryShow /> */}

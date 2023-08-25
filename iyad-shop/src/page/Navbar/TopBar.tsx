@@ -5,7 +5,7 @@ const TopBar = () => {
   return (
     <div className="flex  justify-between ml-10 ">
       <ul className="flex justify-between py-1 border-b-2">
-        <div className="flex justify-start ml-5">
+        <div className="md:flex justify-start ml-5 hidden">
           <li>Welcome to Our store IyadShop</li>
           <li className="flex ml-4">
             <span className="p-1 ">
@@ -17,7 +17,7 @@ const TopBar = () => {
       </ul>
       <div>
         <ul className="flex mr-20">
-          <li>
+          <li className="hidden md:block">
             <Link to={"/test"} className="ml-6">
               test
             </Link>

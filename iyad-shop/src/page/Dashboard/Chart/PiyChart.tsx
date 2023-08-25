@@ -1,91 +1,87 @@
-// import {
-//   RadialBarChart,
-//   RadialBar,
-//   Legend,
-//   ResponsiveContainer,
-// } from "recharts";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid } from "recharts";
+import useAxiuseSecure from "../../../Hooks/useAxiuseSecure";
+import { useQuery } from "@tanstack/react-query";
 
-// const data = [
-//   {
-//     name: "18-24",
-//     uv: 31.47,
-//     pv: 2400,
-//     fill: "#8884d8",
-//   },
-//   {
-//     name: "25-29",
-//     uv: 26.69,
-//     pv: 4567,
-//     fill: "#83a6ed",
-//   },
-//   {
-//     name: "30-34",
-//     uv: 15.69,
-//     pv: 1398,
-//     fill: "#8dd1e1",
-//   },
-//   {
-//     name: "35-39",
-//     uv: 8.22,
-//     pv: 9800,
-//     fill: "#82ca9d",
-//   },
-//   {
-//     name: "40-49",
-//     uv: 8.63,
-//     pv: 3908,
-//     fill: "#a4de6c",
-//   },
-//   {
-//     name: "50+",
-//     uv: 2.63,
-//     pv: 4800,
-//     fill: "#d0ed57",
-//   },
-//   {
-//     name: "unknow",
-//     uv: 6.67,
-//     pv: 4800,
-//     fill: "#ffc658",
-//   },
-// ];
+const colors = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "red", "pink"];
 
-// const style = {
-//   top: "50%",
-//   right: 0,
-//   transform: "translate(0, -50%)",
-//   lineHeight: "24px",
+const getPath = (x: number, y: number, width: number, height: number) => {
+  return `M${x},${y + height}C${x + width / 3},${y + height} ${x + width / 2},${
+    y + height / 3
+  }
+  ${x + width / 2}, ${y}
+  C${x + width / 2},${y + height / 3} ${x + (2 * width) / 3},${y + height} ${
+    x + width
+  }, ${y + height}
+  Z`;
+};
+
+const TriangleBar = (props: {
+  fill: string;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}) => {
+  const { fill, x, y, width, height } = props;
+
+  return <path d={getPath(x, y, width, height)} stroke="none" fill={fill} />;
+};
+
+// type Product = {
+//   category: string;
+//   quantity: number;
+//   // other properties...
 // };
+export default function Apps() {
+  const [axiosSecure] = useAxiuseSecure();
+  const { data: products = [] } = useQuery({
+    queryFn: async () => {
+      const res = await axiosSecure.get(`allProduct`);
+      return res.data;
+    },
+  });
 
-// export default class Example extends PureComponent {
-//   static demoUrl = "https://codesandbox.io/s/simple-radial-bar-chart-qf8fz";
+  //   const categoryData = products.reduce(
+  //     (result: Record<string, any>, product: Product) => {
+  //       const { category, quantity } = product;
+  //       if (!result[category]) {
+  //         result[category] = { category, totalQuantity: 0 };
+  //       }
+  //       result[category].totalQuantity += quantity;
+  //       return result;
+  //     },
+  //     {}
+  //   );
 
-//   render() {
-//     return (
-//       <ResponsiveContainer width="100%" height="100%">
-//         <RadialBarChart
-//           cx="50%"
-//           cy="50%"
-//           innerRadius="10%"
-//           outerRadius="80%"
-//           barSize={10}
-//           data={data}
-//         >
-//           <RadialBar
-//             minAngle={15}
-//             label={{ position: "insideStart", fill: "#fff" }}
-//             background
-//             clockWise
-//             dataKey="uv"
-//           />
-//           <Legend
-//             iconSize={10}
-//             layout="vertical"
-//             verticalAlign="middle"
-//             wrapperStyle={style}
-//           />
-//         </RadialBarChart>
-//       </ResponsiveContainer>
-//     );
-//   }
-// }
+  //   const categoryArray = Object.values(categoryData);
+  return (
+    <BarChart
+      width={500}
+      height={300}
+      data={products}
+      margin={{
+        top: 20,
+        right: 30,
+        left: 20,
+        bottom: 5,
+      }}
+    >
+      <CartesianGrid strokeDasharray="3 3" />
+      <XAxis dataKey="name" />
+      <YAxis />
+      <Bar
+        dataKey="price"
+        fill="#8884d8"
+        shape={<TriangleBar fill={""} x={0} y={0} width={0} height={0} />}
+        label={{ position: "top" }}
+      >
+        {products.map((_entry: any, index: number) => (
+          <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
+        ))}
+      </Bar>
+    </BarChart>
+  );
+}
+
+Apps.demoUrl = "https://codesandbox.io/s/bar-chart-with-customized-shape-dusth";

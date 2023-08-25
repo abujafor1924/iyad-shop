@@ -55,7 +55,7 @@ const AddProduct = () => {
       .then((imgResponse) => {
         if (imgResponse.success) {
           const imgURL = imgResponse.data.display_url;
-          const { name, price, category, quantity, description } = data;
+          const { date, name, price, category, quantity, description } = data;
           const newItem = {
             name,
             price: parseFloat(price),
@@ -63,6 +63,7 @@ const AddProduct = () => {
             description,
             quantity: parseInt(quantity),
             image: imgURL,
+            date,
           };
           console.log(newItem);
           axiosSecure.post("/addProduct", newItem).then((data) => {

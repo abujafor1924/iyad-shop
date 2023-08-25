@@ -379,6 +379,17 @@ async function run() {
       res.send(result);
     });
 
+    // new Arraible Product
+    app.get("/newProduct", async (req, res) => {
+      const result = await productCollection
+        .find()
+        .sort({ date: -1 })
+        .limit(10)
+        .toArray();
+
+      res.send(result);
+    });
+
     await client.db("admin").command({ ping: 1 });
     console.log(
       "Pinged your deployment. You successfully connected to MongoDB!"
